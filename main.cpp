@@ -6,13 +6,12 @@
 #include "error.h"
 #include <iostream>
 #include <cstring>
+#include <compiler/compiler.h>
 
 int main(int argc, char *argv[]) {
     char *filename = argv[1];
-    Scanner *scanner = new Scanner(filename);
-    Lexer *lexer = new Lexer(*scanner);
-    Parser *parser = new Parser(*lexer);
-    Error *error = new Error(scanner);
-    parser->analyse();
+    // parse the arguments
+    Compiler complier;
+    complier.compile(filename);
     return 0;
 }

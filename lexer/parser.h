@@ -2,6 +2,8 @@
 // Created by 欧阳世勇 on 2021/3/10.
 //
 #pragma once
+
+#include <compiler/symtab.h>
 #include "token.h"
 #include "error.h"
 
@@ -14,28 +16,28 @@ public:
     Tag type();
 
     // declaration and definition
-    void defdata();
+    Var* defdata(bool ext,Tag t);
 
-    void deflist();
+    void deflist(bool ext,Tag t);
 
-    void vardef();
+    Var* vardef(bool ext,Tag t,bool ptr,string name);
 
-    void init();
+    Var* init(bool ext,Tag t,bool ptr,string name);
 
     void def(bool b, Tag tag);
 
-    void idtail();
+    void idtail(bool ext,Tag t,bool ptr,string name);
 
     // function
-    void paradatatail();
+    Var* paradatatail(Tag t,string n);
 
-    void paradata();
+    Var* paradata(Tag t);
 
-    void para();
+    void para(vector<Var*> &paraList);
 
-    void paralist();
+    void paralist(vector<Var*> &);
 
-    void funtail();
+    void funtail(Func *func);
 
     void block();
 
@@ -60,77 +62,80 @@ public:
 
     void switchstat();
 
-    void casestat();
+    void casestat(Var *cond);
 
-    void caselabel();
+    Var* caselabel();
 
     //expression
-    void altexpr();
+    Var* altexpr();
 
-    void expr();
+    Var* expr();
 
-    void assexpr();
+    Var* assexpr();
 
-    void asstail();
+    Var* asstail(Var* lval);
 
-    void orexpr();
+    Var* orexpr();
 
-    void ortail();
+    Var* ortail(Var* lval);
 
-    void andexpr();
+    Var* andexpr();
 
-    void andtail();
+    Var* andtail(Var* lval);
 
-    void cmpexpr();
+    Var* cmpexpr();
 
-    void cmptail();
+    Var* cmptail(Var* lval);
 
-    void cmps();
+    Tag cmps();
 
-    void aloexpr();
+    Var* aloexpr();
 
-    void alotail();
+    Var* alotail(Var* lval);
 
-    void adds();
+    Tag adds();
 
-    void item();
+    Var* item();
 
-    void itemtail();
+    Var* itemtail(Var *lval);
 
-    void muls();
+    Tag muls();
 
-    void factor();
+    Var* factor();
 
-    void lop();
+    Tag lop();
 
-    void val();
+    Var* val();
 
-    void rop();
+    Tag rop();
 
-    void elem();
+    Var* elem();
 
-    void literal();
+    Var* literal();
 
-    void idexpr();
+    Var* idexpr(string name);
 
-    void realarg();
+    void realarg(vector<Var*> &args);
 
-    void arglist();
+    void arglist(vector<Var*> &args);
 
-    void arg();
+    Var* arg();
 
     // LL(1) grammar pre-reading next character
     Token *look;
     Lexer &lexer;
-    //programmer and recovery from error
+
+    SymTab &symtab;
+
     void move();
 
     bool match(Tag need); // if match successful, move it.
 
+    //programmer and recovery from error
     void recovery(bool cond, SynError lost, SynError wrong);
 
 public:
-    Parser(Lexer &lexer);
+    Parser(Lexer &lexer, SymTab &symTab);
 
     void analyse();
 
